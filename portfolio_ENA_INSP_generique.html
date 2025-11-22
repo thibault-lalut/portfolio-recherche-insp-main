@@ -1,0 +1,2129 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENA → INSP : Portfolio de recherche</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* === VARIABLES ET RESET === */ 
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --light-bg: #ecf0f1;
+            --dark-bg: #34495e;
+            --text-color: #2c3e50;
+            --border-color: #bdc3c7;
+            --hover-color: #3498db15;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f8f9fa;
+        }
+
+        /* === HEADER === */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-bg) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        header h2 {
+            font-size: 1.3rem;
+            font-weight: 400;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        header p {
+            max-width: 900px;
+            margin: 0 auto;
+            font-size: 1.05rem;
+            opacity: 0.95;
+        }
+
+        /* === MAIN CONTAINER === */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* === SECTIONS === */
+        section {
+            background: white;
+            margin: 2rem 0;
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        section h2 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+
+        section h3 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        section p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        /* === TABS === */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--text-color);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button:hover {
+            background-color: var(--hover-color);
+        }
+
+        .tab-button.active {
+            color: var(--secondary-color);
+            border-bottom-color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === ACCORDION === */
+        .accordion {
+            margin: 1.5rem 0;
+        }
+
+        .accordion-item {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            background-color: var(--light-bg);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .accordion-header:hover {
+            background-color: #dce1e3;
+        }
+
+        .accordion-header h4 {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+        }
+
+        .accordion-icon {
+            transition: transform 0.3s ease;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .accordion-item.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .accordion-content-inner {
+            padding: 1.5rem;
+        }
+
+        /* === STATISTICS BOXES === */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #5D6D7E 0%, #34495E 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .stat-box h4 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .stat-box h4.small-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .stat-box p {
+            font-size: 1rem;
+            opacity: 0.9;
+            text-align: center;
+            margin-bottom: 0;
+        }
+
+        /* === CHARTS === */
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 2rem 0;
+        }
+
+        .chart-container.large {
+            height: 500px;
+        }
+
+        .chart-container.small {
+            height: 300px;
+        }
+
+        /* === TABLES === */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+
+        table th {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        table tr:hover {
+            background-color: var(--hover-color);
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        /* === HIGHLIGHT BOXES === */
+        .highlight-box {
+            background-color: #e8f4f8;
+            border-left: 4px solid var(--secondary-color);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        .highlight-box.warning {
+            background-color: #fff3cd;
+            border-left-color: var(--warning-color);
+        }
+
+        .highlight-box.success {
+            background-color: #d4edda;
+            border-left-color: var(--success-color);
+        }
+
+        /* === METHODOLOGY PIPELINE === */
+        .pipeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .pipeline-step {
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+            padding: 1.5rem;
+            background-color: var(--light-bg);
+            border-radius: 8px;
+            margin: 0.5rem;
+            position: relative;
+        }
+
+        .pipeline-step::after {
+            content: '→';
+            position: absolute;
+            right: -1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: var(--secondary-color);
+        }
+
+        .pipeline-step:last-child::after {
+            display: none;
+        }
+
+        .pipeline-step h5 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        /* === LISTS === */
+        ul.key-findings {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul.key-findings li {
+            padding: 1rem 1rem 1rem 3rem;
+            margin-bottom: 0.8rem;
+            background-color: var(--light-bg);
+            border-radius: 6px;
+            position: relative;
+        }
+
+        ul.key-findings li::before {
+            content: '✓';
+            position: absolute;
+            left: 1rem;
+            color: var(--success-color);
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+        /* === FOOTER === */
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            header h2 {
+                font-size: 1.1rem;
+            }
+
+            section {
+                padding: 1.5rem;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab-button {
+                width: 100%;
+                text-align: left;
+            }
+
+            .pipeline {
+                flex-direction: column;
+            }
+
+            .pipeline-step::after {
+                display: none;
+            }
+        }
+
+        /* === SPECIAL ELEMENTS === */
+        .term-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin: 0.2rem;
+        }
+
+        .period-label {
+            font-weight: 600;
+            color: var(--primary-color);
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            background-color: var(--light-bg);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <h1>Portfolio de recherche – Synthèse interactive du mémoire</h1>
+        <h2><strong>Analyse lexicométrique des sites ENA–INSP &amp; sociographie des élèves de l'INSP</strong></h2>
+        <p style="text-align: justify; max-width: 900px; margin: 0 auto;">
+            Ce portfolio propose une analyse structurée de la transformation de l'École nationale d'administration (ENA) 
+            en Institut national du service public (INSP), à partir de deux démarches complémentaires issues de mon mémoire 
+            de recherche : <strong>analyse lexicométrique de 31 465 documents archivés en ligne (1998–2025)</strong> et 
+            <strong>sociographie détaillée des promotions de l'INSP</strong>.<br><br>
+            Au-delà de l'intérêt substantiel pour la transformation de cette institution, ce portfolio donne à voir, de manière 
+            concrète, ma maîtrise de l'analyse lexicale de très gros corpus textuels, de la réalisation de monographies empiriques, 
+            et de la rédaction de synthèses claires et opérationnelles.
+        </p>
+        <p style="margin-top: 1.5rem; font-size: 1.1rem; opacity: 0.95;">
+            <strong>Thibault Lalut</strong> – Diplômé du master Sociologie à l'EHESS
+        </p>
+    </header>
+
+    <div class="container">
+        <!-- SECTION 1 : PRÉSENTATION GÉNÉRALE -->
+        <section id="presentation">
+            <h2>1. Présentation générale de l'enquête</h2>
+            
+            <h3>Mémoire et dispositif d'enquête</h3>
+            <p>
+                L'enquête repose sur deux corpus articulés. D'une part, un <strong>corpus web de 115 168 URL archivées</strong> 
+                via la Wayback Machine, soit 31 465 pages et documents institutionnels produits entre 1998 et 2025. D'autre part, 
+                un <strong>corpus sociographique</strong> portant sur quatre promotions d'élèves de l'INSP (2022–2027), documentant 
+                les parcours académiques, les expériences professionnelles et les premières affectations de <strong>327 élèves</strong>.
+            </p>
+            <p>
+                <em>Note : La seule promotion à la fois ENA &amp; INSP (Germain Tillion, 2021-2022) a été également comprise dans 
+                l'analyse prosopographique, mais les statistiques présentées ici ne retiennent que les promotions entrées à l'INSP.</em>
+            </p>
+            <p>
+                L'analyse croisée de ces matériaux permet de confronter les formes prises par le récit institutionnel aux propriétés 
+                sociales des élèves, et de mettre au jour les écarts entre promesses de démocratisation, logiques de reproduction 
+                et continuités de l'appareil d'État.
+            </p>
+        </section>
+
+        <!-- SECTION 2 : ANALYSE LEXICOMÉTRIQUE -->
+        <section id="lexicometrie">
+            <h2>2. Analyse lexicométrique (ENA → INSP)</h2>
+            
+            <div class="tabs">
+                <button class="tab-button active" onclick="openTab(event, 'lexico-corpus')">Corpus</button>
+                <button class="tab-button" onclick="openTab(event, 'lexico-termes')">Termes clés</button>
+                <button class="tab-button" onclick="openTab(event, 'lexico-groupes')">Groupes conceptuels</button>
+                <button class="tab-button" onclick="openTab(event, 'lexico-archi')">Architecture numérique</button>
+                <button class="tab-button" onclick="openTab(event, 'lexico-sankey')">Transition (Sankey)</button>
+            </div>
+
+            <!-- TAB : CORPUS -->
+            <div id="lexico-corpus" class="tab-content active">
+                <h3>Corpus et protocole méthodologique</h3>
+                
+                <h4>Pipeline de traitement des données</h4>
+                <div class="pipeline">
+                    <div class="pipeline-step">
+                        <h5>1. Collecte</h5>
+                        <p>Web scraping ciblé (Wayback Machine)</p>
+                    </div>
+                    <div class="pipeline-step">
+                        <h5>2. Extraction</h5>
+                        <p>Filtrage des contenus officiels</p>
+                    </div>
+                    <div class="pipeline-step">
+                        <h5>3. Traitement</h5>
+                        <p>Lemmatisation &amp; normalisation</p>
+                    </div>
+                    <div class="pipeline-step">
+                        <h5>4. Analyse</h5>
+                        <p>Analyses lexicométriques &amp; statistiques</p>
+                    </div>
+                    <div class="pipeline-step">
+                        <h5>5. Visualisation</h5>
+                        <p>Graphiques &amp; synthèses</p>
+                    </div>
+                </div>
+
+                <h4>Indicateurs globaux du corpus</h4>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <h4>115 168</h4>
+                        <p>URL archivées</p>
+                    </div>
+                    <div class="stat-box">
+                        <h4>31 465</h4>
+                        <p>Documents analysés</p>
+                    </div>
+                    <div class="stat-box">
+                        <h4>27 ans</h4>
+                        <p>Période couverte (1998-2025)</p>
+                    </div>
+                    <div class="stat-box">
+                        <h4>5</h4>
+                        <p>Périodes chronologiques</p>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>Spécificités du corpus</h4>
+                    <p>
+                        L'analyse porte exclusivement sur des <strong>productions officielles</strong> : communiqués, rapports, 
+                        discours, notes publiques et documents de présentation. Les fréquences sont <strong>normalisées à 10 000 mots</strong> 
+                        pour permettre les comparaisons diachroniques. Un travail de lemmatisation assure le regroupement des variantes 
+                        grammaticales d'un même terme (ex : "innover", "innovation", "innovant" → "innovation").
+                    </p>
+                </div>
+
+                <h4>Périodisation : 5 séquences chronologiques</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Période</th>
+                            <th>Années</th>
+                            <th>Caractéristiques</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="period-label">Période 1</span></td>
+                            <td>1998-2005</td>
+                            <td>Débats sur la démocratisation de l'ENA</td>
+                        </tr>
+                        <tr>
+                            <td><span class="period-label">Période 2</span></td>
+                            <td>2005-2018</td>
+                            <td>Remise en cause progressive de l'institution</td>
+                        </tr>
+                        <tr>
+                            <td><span class="period-label">Période 3</span></td>
+                            <td>2018-2019</td>
+                            <td>Crise des Gilets jaunes et accélération des critiques</td>
+                        </tr>
+                        <tr>
+                            <td><span class="period-label">Période 4</span></td>
+                            <td>2019-2022</td>
+                            <td>Réforme annoncée et phase de transition</td>
+                        </tr>
+                        <tr>
+                            <td><span class="period-label">Période 5</span></td>
+                            <td>2022-2025</td>
+                            <td>Mise en place et consolidation de l'INSP</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <h4>Détails techniques du protocole</h4>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <p><strong>Lemmatisation :</strong> Regroupement des variantes grammaticales et morphologiques pour ramener chaque mot à sa forme canonique.</p>
+                                <p><strong>Normalisation :</strong> Expression des fréquences pour 10 000 mots afin de permettre les comparaisons entre périodes de volumes textuels différents.</p>
+                                <p><strong>Filtrage :</strong> Exclusion des pages techniques (CSS, JavaScript, images) et conservation uniquement des contenus institutionnels produits par l'ENA/INSP.</p>
+                                <p><strong>Validation :</strong> Vérification manuelle d'un échantillon de 500 documents pour s'assurer de la pertinence du corpus.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB : TERMES CLÉS -->
+            <div id="lexico-termes" class="tab-content">
+                <h3>Évolutions des termes clés</h3>
+                <p>
+                    Quatre termes ont été sélectionnés pour leur caractère stratégique dans la transformation institutionnelle :
+                </p>
+                <div style="display: flex; justify-content: center; gap: 1rem; margin: 1.5rem 0; flex-wrap: wrap;">
+                    <span class="term-badge" style="background-color: #52796F;">compétences</span>
+                    <span class="term-badge" style="background-color: #5D6D7E;">concours</span>
+                    <span class="term-badge" style="background-color: #B8860B;">élite</span>
+                    <span class="term-badge" style="background-color: #7D6E83;">innovation</span>
+                </div>
+
+                <div class="chart-container large">
+                    <canvas id="chartTermesCles"></canvas>
+                </div>
+
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <h4>Analyse détaillée : "compétences"</h4>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <p>
+                                    L'innovation lexicale la plus spectaculaire concerne le terme <strong>"compétences"</strong>. 
+                                    Son explosion après 2021 (passant de moins de 1 à près de 7 occurrences pour 10 000 mots) témoigne 
+                                    de l'adoption explicite du référentiel managérial au cœur de la pédagogie INSP. Le contraste avec 
+                                    sa quasi-absence dans le discours de l'ENA révèle une rupture pédagogique réelle, bien qu'elle ne 
+                                    concerne qu'un aspect spécifique de la formation.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <h4>Analyse détaillée : "concours"</h4>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <p>
+                                    À l'inverse, la remarquable persistance du terme <strong>"concours"</strong> tout au long de la période, 
+                                    y compris après la création de l'INSP, témoigne de la stabilité d'un pilier central du système de sélection. 
+                                    Sa visibilité s'affirme dès les années 2010 avec certains pics lexicométriques, mais la continuité 
+                                    de sa présence domine. Les concours ont connu des ajustements significatifs, sans remise en cause 
+                                    de leur existence, à la différence du classement de sortie, récemment supprimé.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <h4>Analyse détaillée : "élite"</h4>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <p>
+                                    L'usage du mot <strong>"élite"</strong> soulève sans doute les interrogations les plus vives. 
+                                    Sa quasi-disparition dans le discours de l'INSP (passant de 2,6 à 0,2 occurrences pour 10 000 mots) suggère 
+                                    une stratégie de mise à distance du vocabulaire traditionnel, en accord apparent avec les attentes contemporaines 
+                                    en matière d'égalité et de démocratisation. L'évolution traduit-elle un changement profond ou un simple 
+                                    réajustement communicationnel ? L'effacement lexical observé pourrait témoigner d'un évitement visant à 
+                                    neutraliser une catégorie devenue socialement disqualifiante.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <h4>Analyse détaillée : "innovation"</h4>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <p>
+                                    Une trajectoire inverse caractérise le terme <strong>"innovation"</strong> : sa fréquence bondit dès 2019-2020, 
+                                    soit deux ans avant la création officielle de l'INSP. Un signal faible mais significatif, renforçant 
+                                    l'hypothèse d'un ajustement symbolique progressif plutôt que d'une rupture brutale. La phase de transition 
+                                    (2021-2022) voit se stabiliser cet usage par l'introduction anticipée d'un vocabulaire modernisateur destiné 
+                                    à accompagner, sinon précéder, le basculement institutionnel.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB : GROUPES CONCEPTUELS -->
+            <div id="lexico-groupes" class="tab-content">
+                <h3>Groupes conceptuels et polarités</h3>
+                <p>
+                    L'analyse par groupes conceptuels permet d'objectiver les variations lexicales selon quatre grandes polarités :
+                </p>
+
+                <div class="stats-grid">
+                    <div class="stat-box" style="background: linear-gradient(135deg, #B8860B 0%, #9A7D0A 100%);">
+                        <h4 class="small-title">Élitaire &amp; Sélection</h4>
+                        <p>élite, concours, classement,<br>méritocratie, carrière</p>
+                    </div>
+                    <div class="stat-box" style="background: linear-gradient(135deg, #5D6D7E 0%, #34495E 100%);">
+                        <h4 class="small-title">Managérial &amp; Moderne</h4>
+                        <p>compétences, management,<br>innovation, gouvernance, numérique</p>
+                    </div>
+                    <div class="stat-box" style="background: linear-gradient(135deg, #52796F 0%, #354F52 100%);">
+                        <h4 class="small-title">Ouverture &amp; Diversité</h4>
+                        <p>diversité, territoire,<br>partenariat, international</p>
+                    </div>
+                    <div class="stat-box" style="background: linear-gradient(135deg, #8B7355 0%, #6F5438 100%);">
+                        <h4 class="small-title">Continuité<br>Institutionnelle</h4>
+                        <p>formation, service public,<br>état, réforme</p>
+                    </div>
+                </div>
+
+                <div class="chart-container large">
+                    <canvas id="chartGroupesConceptuels"></canvas>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>Interprétation</h4>
+                    <p>
+                        Alors que la période 1998-2019 reste dominée par les marqueurs de sélection, les référentiels managériaux 
+                        n'amorcent leur ascension qu'après la séquence des Gilets jaunes. L'émergence rapide de termes comme "numérique" 
+                        ou "management" à compter de 2021 coïncide avec la disparition de l'ENA. Une zone de transition (2019-2022) 
+                        signale un chevauchement révélateur où les termes du nouveau référentiel s'imposent sans que tous les anciens 
+                        ne disparaissent.
+                    </p>
+                </div>
+
+                <h4>Persistance vs Innovation lexicale</h4>
+                <div class="chart-container">
+                    <canvas id="chartPersistance"></canvas>
+                </div>
+                <p style="font-size: 0.9rem; color: #666; text-align: center; margin-top: -1rem;">
+                    <strong>Même les termes les plus innovants conservent une proportion majoritaire héritée de la période ENA (60-75%)</strong>
+                </p>
+            </div>
+
+            <!-- TAB : ARCHITECTURE NUMÉRIQUE -->
+            <div id="lexico-archi" class="tab-content">
+                <h3>Architecture numérique des sites</h3>
+                <p>
+                    Au-delà du versant lexical, la matérialité numérique révèle également les transformations institutionnelles. 
+                    L'architecture des sites de l'ENA puis de l'INSP, dans la constitution des rubriques, l'évolution des sections ou 
+                    l'adressage des pages, constitue un prisme d'analyse révélateur.
+                </p>
+
+                <h4>Profondeur moyenne des URLs (1998-2025)</h4>
+                <div class="chart-container">
+                    <canvas id="chartProfondeurURL"></canvas>
+                </div>
+
+                <div class="highlight-box">
+                    <p>
+                        L'organisation des pages révèle une tendance à la complexification, amorcée dès les années 2000 avec un premier 
+                        pic structurel autour de 2006 (près de 9 niveaux hiérarchiques), coïncidant avec la réorganisation du site suite 
+                        à la délocalisation de Strasbourg. Après une phase de stabilisation autour de 6 niveaux, un renouveau significatif 
+                        s'opère à compter de 2022.
+                    </p>
+                </div>
+
+                <h4>Nombre de sections distinctes</h4>
+                <div class="chart-container">
+                    <canvas id="chartNombreSections"></canvas>
+                </div>
+
+                <p>
+                    Un enrichissement perceptible accompagne la création de l'INSP, à travers une envolée du nombre de sections 
+                    identifiées (plus de 150 en 2024). L'institution multiplie les ancrages thématiques pour construire une visibilité 
+                    renouvelée, plus éclatée, où les anciennes catégories s'effacent au profit d'une granularité nouvelle.
+                </p>
+
+                <h4>Répartition Technique / Thématique des sections</h4>
+                <div class="chart-container">
+                    <canvas id="chartTechniqueThematique"></canvas>
+                </div>
+
+                <div class="highlight-box warning">
+                    <h4>Mutation notable des formats</h4>
+                    <p>
+                        Sous l'ENA, le site restait largement dominé par des structures techniques. À partir de 2022, une inversion 
+                        s'opère : les rubriques thématiques (liées à la structure CSS ou aux scripts d'interaction) prennent le pas 
+                        sur les contenus proprement éditoriaux, jusqu'à représenter une part majoritaire. Un déplacement qui traduit 
+                        une préférence pour une mise en forme soignée, susceptible de se substituer à des contenus explicites détaillant 
+                        l'application concrète de mesures.
+                    </p>
+                </div>
+            </div>
+
+            <!-- TAB : SANKEY -->
+            <div id="lexico-sankey" class="tab-content">
+                <h3>Transition des sections ENA → INSP</h3>
+                <p>
+                    Le diagramme de Sankey révèle les mécanismes précis de la transition entre les sites ENA et INSP. Les flux épais 
+                    vers "Nouvelles" et "sites" signalent les priorités communicationnelles de l'INSP naissant, tandis que les 
+                    continuités (Formation, École, Europe-et-international) témoignent de la préservation sélective maintenue.
+                </p>
+
+                <div class="highlight-box success">
+                    <h4>Principaux flux identifiés</h4>
+                    <ul style="margin-top: 1rem;">
+                        <li><strong>Continuités majeures :</strong> Formation, École, Europe-et-international, Concours</li>
+                        <li><strong>Nouvelles créations :</strong> "Nouvelles" (flux dominant), "sites", "actualités"</li>
+                        <li><strong>Suppressions :</strong> Nombreuses sections ENA abandonnées ou fusionnées</li>
+                        <li><strong>Rationalisation :</strong> Regroupement de sections thématiques multiples</li>
+                    </ul>
+                </div>
+
+                <div style="background-color: #f8f9fa; padding: 2rem; border-radius: 8px; text-align: center; margin: 2rem 0;">
+                    <p style="font-style: italic; color: #666;">
+                        Diagramme de Sankey représentant les flux de transition entre sections ENA (gauche) et INSP (droite).
+                        Les flux épais indiquent les principales continuités et créations.
+                    </p>
+                    <p style="font-weight: 600; color: var(--primary-color); margin-top: 1rem;">
+                        [Visualisation interactive disponible dans l'analyse complète]
+                    </p>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>Interprétation sociologique</h4>
+                    <p>
+                        Les suppressions et créations de sections transcrivent un esprit de rationalisation accompagné d'innovation. 
+                        La priorité donnée aux rubriques "Nouvelles" et communication institutionnelle révèle une stratégie de 
+                        modernisation de l'image, tandis que la préservation de sections clés (Formation, Concours) atteste de la 
+                        continuité des mécanismes fondamentaux de sélection et de formation des élites administratives.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3 : SOCIOGRAPHIE -->
+        <section id="sociographie">
+            <h2>3. Sociographie de l'INSP</h2>
+
+            <div class="tabs">
+                <button class="tab-button active" onclick="openTab(event, 'socio-profil')">Profil global</button>
+                <button class="tab-button" onclick="openTab(event, 'socio-origines')">Origines scolaires</button>
+                <button class="tab-button" onclick="openTab(event, 'socio-stages')">Stages &amp; territoires</button>
+                <button class="tab-button" onclick="openTab(event, 'socio-exp')">Expérience pro</button>
+                <button class="tab-button" onclick="openTab(event, 'socio-affectations')">Affectations</button>
+                <button class="tab-button" onclick="openTab(event, 'socio-synthese')">Points saillants</button>
+            </div>
+
+            <!-- TAB : PROFIL GLOBAL -->
+            <div id="socio-profil" class="tab-content active">
+                <h3>Profil global des élèves</h3>
+
+                <h4>Répartition par genre (4 promotions)</h4>
+                <div class="chart-container">
+                    <canvas id="chartGenre"></canvas>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Promotion</th>
+                            <th>Femmes (%)</th>
+                            <th>Hommes (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Promo 2022-2023</td>
+                            <td>42,7%</td>
+                            <td>57,3%</td>
+                        </tr>
+                        <tr>
+                            <td>Promo 2023-2024</td>
+                            <td>41,6%</td>
+                            <td>58,4%</td>
+                        </tr>
+                        <tr>
+                            <td>Promo 2024-2026</td>
+                            <td>39,8%</td>
+                            <td>60,2%</td>
+                        </tr>
+                        <tr>
+                            <td>Promo 2025-2027A</td>
+                            <td>41,0%</td>
+                            <td>59,0%</td>
+                        </tr>
+                        <tr style="background-color: var(--light-bg); font-weight: 600;">
+                            <td>Total</td>
+                            <td>41,3%</td>
+                            <td>58,7%</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="highlight-box">
+                    <h4>Observations</h4>
+                    <p>
+                        La part des femmes reste stable autour de 41-42% sur les quatre promotions analysées, avec une légère baisse 
+                        pour la promotion 2024-2026 (39,8%). Cette répartition témoigne d'une féminisation significative mais incomplète 
+                        de l'INSP, qui demeure en deçà de la parité. La persistance de ce ratio suggère des mécanismes structurels de 
+                        reproduction genrée dans l'accès à la haute fonction publique.
+                    </p>
+                </div>
+
+                <h4>Présence sur LinkedIn</h4>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <h4>94,4%</h4>
+                        <p>Promo 2023-2024</p>
+                    </div>
+                    <div class="stat-box">
+                        <h4>93,2%</h4>
+                        <p>Promo 2024-2026</p>
+                    </div>
+                    <div class="stat-box">
+                        <h4>93,4%</h4>
+                        <p>Promo 2025-2027A</p>
+                    </div>
+                    <div class="stat-box">
+                        <h4>93,7%</h4>
+                        <p>Moyenne totale</p>
+                    </div>
+                </div>
+                <p>
+                    Une présence quasi-systématique sur LinkedIn (93,7% en moyenne) témoigne de l'intégration des élèves aux codes 
+                    de la valorisation professionnelle contemporaine et facilite considérablement le travail sociographique.
+                </p>
+            </div>
+
+            <!-- TAB : ORIGINES SCOLAIRES -->
+            <div id="socio-origines" class="tab-content">
+                <h3>Origines scolaires et parcours académiques</h3>
+
+                <h4>Dernier établissement avant l'INSP (par promotion)</h4>
+                <div class="chart-container large">
+                    <canvas id="chartDernierEtablissement"></canvas>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Type d'établissement</th>
+                            <th>2022-2023</th>
+                            <th>2023-2024</th>
+                            <th>2024-2026</th>
+                            <th>2025-2027A</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Sciences Po (tous IEP)</td>
+                            <td>44</td>
+                            <td>29</td>
+                            <td>35</td>
+                            <td>24</td>
+                        </tr>
+                        <tr>
+                            <td>Universités</td>
+                            <td>13</td>
+                            <td>25</td>
+                            <td>12</td>
+                            <td>16</td>
+                        </tr>
+                        <tr>
+                            <td>IGPDE</td>
+                            <td>9</td>
+                            <td>4</td>
+                            <td>7</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td>ENS (toutes)</td>
+                            <td>6</td>
+                            <td>9</td>
+                            <td>10</td>
+                            <td>4</td>
+                        </tr>
+                        <tr>
+                            <td>Écoles de commerce</td>
+                            <td>4</td>
+                            <td>5</td>
+                            <td>7</td>
+                            <td>5</td>
+                        </tr>
+                        <tr>
+                            <td>Universités internationales</td>
+                            <td>3</td>
+                            <td>3</td>
+                            <td>3</td>
+                            <td>1</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="highlight-box">
+                    <h4>Domination de Sciences Po</h4>
+                    <p>
+                        Les Instituts d'Études Politiques (IEP), avec Sciences Po Paris en tête, constituent le vivier principal 
+                        de recrutement de l'INSP. Avec 44 élèves issus d'IEP sur 89 pour la promo 2022-2023 (49,4%), dont 31 de Sciences Po Paris, 
+                        une sur-représentation témoigne de la persistance des filières d'excellence traditionnelles dans l'accès à la 
+                        haute fonction publique, malgré les discours de démocratisation.
+                    </p>
+                </div>
+
+                <h4>Parcours académique complet (cumul des formations)</h4>
+                <div class="chart-container">
+                    <canvas id="chartParcoursAcademique"></canvas>
+                </div>
+
+                <p>
+                    L'analyse du parcours académique complet révèle une forte mobilité étudiante et une accumulation de formations prestigieuses :
+                </p>
+                <ul class="key-findings">
+                    <li>60-72% des élèves sont passés par un IEP au cours de leur parcours</li>
+                    <li>41-52% ont étudié dans une université internationale</li>
+                    <li>33-52% dans une université francilienne</li>
+                    <li>13-22% ont fréquenté une ENS</li>
+                    <li>12-22% une école de commerce</li>
+                </ul>
+
+                <div class="highlight-box warning">
+                    <h4>Hyperaccumulation de capital scolaire</h4>
+                    <p>
+                        La moyenne de 2,5 à 3,2 formations par élève (hors formations brèves) atteste d'une hyperaccumulation de capital 
+                        scolaire. Les élèves de l'INSP ne se contentent pas d'une formation d'excellence, ils en cumulent plusieurs, 
+                        combinant souvent un IEP, une université de recherche (en France ou à l'étranger), et parfois une école de commerce 
+                        ou une ENS. Cette stratégie d'accumulation maximise les ressources symboliques et relationnelles.
+                    </p>
+                </div>
+            </div>
+
+            <!-- TAB : STAGES -->
+            <div id="socio-stages" class="tab-content">
+                <h3>Stages et immersions territoriales</h3>
+
+                <p>
+                    Chaque élève de l'INSP effectue trois stages obligatoires : un stage international, un stage territorial et une 
+                    mission d'ouverture en territoire (entreprise). L'analyse de ces stages révèle les espaces de socialisation 
+                    professionnelle des futurs hauts fonctionnaires.
+                </p>
+
+                <h4>Stages internationaux (Promo 2022-2023)</h4>
+                <div class="chart-container">
+                    <canvas id="chartStagesInternationaux"></canvas>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Catégorie</th>
+                            <th>Nombre</th>
+                            <th>Proportion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Ambassades</td>
+                            <td>51</td>
+                            <td>65%</td>
+                        </tr>
+                        <tr>
+                            <td>Représentations permanentes UE</td>
+                            <td>7</td>
+                            <td>9%</td>
+                        </tr>
+                        <tr>
+                            <td>Ministère des Affaires étrangères</td>
+                            <td>7</td>
+                            <td>9%</td>
+                        </tr>
+                        <tr>
+                            <td>Organisations internationales</td>
+                            <td>5</td>
+                            <td>6%</td>
+                        </tr>
+                        <tr>
+                            <td>Commission européenne</td>
+                            <td>5</td>
+                            <td>6%</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="highlight-box">
+                    <p>
+                        Les ambassades représentent la destination privilégiée (65%), suivies des institutions européennes. 
+                        Les zones géographiques les plus fréquentées sont l'Europe (21 stages), l'Afrique (13) et l'Asie (11).
+                    </p>
+                </div>
+
+                <h4>Stages territoriaux</h4>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <h4>75</h4>
+                        <p>Préfectures<br>(Promo 2022-2023)</p>
+                    </div>
+                    <div class="stat-box">
+                        <h4>84%</h4>
+                        <p>Part des stages<br>en préfecture</p>
+                    </div>
+                    <div class="stat-box">
+                        <h4>13</h4>
+                        <p>Régions<br>couvertes</p>
+                    </div>
+                    <div class="stat-box">
+                        <h4>10</h4>
+                        <p>Stages en Île-de-France<br>et Occitanie</p>
+                    </div>
+                </div>
+
+                <h4>Missions d'ouverture en territoire (entreprises)</h4>
+                <div class="chart-container">
+                    <canvas id="chartMissionsEntreprise"></canvas>
+                </div>
+
+                <div class="highlight-box success">
+                    <h4>Diversité des secteurs</h4>
+                    <p>
+                        Les missions d'ouverture en territoire révèlent une diversité de secteurs : entreprises industrielles (22), 
+                        agricoles et forestières (12), technologiques (8), de services (6), coopératives (5). Cette immersion vise à familiariser les futurs hauts fonctionnaires avec les réalités économiques des territoires, bien que les missions rendues publiques ne couvrent qu'une partie de l'ensemble (57 sur 89, soit 64 % pour 2022-2023 et 60 % pour la promotion suivante).
+                    </p>
+                </div>
+            </div>
+
+            <!-- TAB : EXPÉRIENCE PRO -->
+            <div id="socio-exp" class="tab-content">
+                <h3>Expérience professionnelle avant l'INSP</h3>
+
+                <p>
+                    L'analyse des expériences professionnelles antérieures à l'entrée à l'INSP révèle des profils déjà largement 
+                    socialisés aux institutions publiques et aux milieux d'élite.
+                </p>
+
+                <div class="chart-container large">
+                    <canvas id="chartExperiencePro"></canvas>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Secteur d'expérience</th>
+                            <th>2022-2023</th>
+                            <th>2023-2024</th>
+                            <th>2024-2026</th>
+                            <th>2025-2027</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Administration publique nationale</td>
+                            <td>65%</td>
+                            <td>60%</td>
+                            <td>62%</td>
+                            <td>74%</td>
+                        </tr>
+                        <tr>
+                            <td>Conseil et secteur privé</td>
+                            <td>24%</td>
+                            <td>31%</td>
+                            <td>36%</td>
+                            <td>31%</td>
+                        </tr>
+                        <tr>
+                            <td>International et diplomatique</td>
+                            <td>21%</td>
+                            <td>31%</td>
+                            <td>34%</td>
+                            <td>36%</td>
+                        </tr>
+                        <tr>
+                            <td>Enseignement et recherche</td>
+                            <td>16%</td>
+                            <td>27%</td>
+                            <td>34%</td>
+                            <td>20%</td>
+                        </tr>
+                        <tr>
+                            <td>Parlementaire et juridique</td>
+                            <td>22%</td>
+                            <td>21%</td>
+                            <td>31%</td>
+                            <td>30%</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <h4>2,5 - 3,2</h4>
+                        <p>Nombre moyen<br>d'expériences par élève</p>
+                    </div>
+                    <div class="stat-box">
+                        <h4>65%</h4>
+                        <p>Part moyenne dans<br>l'administration publique</p>
+                    </div>
+                    <div class="stat-box">
+                        <h4>94%</h4>
+                        <p>Élèves avec au moins<br>une expérience</p>
+                    </div>
+                    <div class="stat-box">
+                        <h4>8</h4>
+                        <p>Catégories de secteurs<br>identifiés</p>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>Pré-socialisation institutionnelle</h4>
+                    <p>
+                        Une domination des expériences dans l'administration publique nationale (60-74% des élèves) témoigne d'une 
+                        pré-socialisation institutionnelle significative. Une large partie des élèves de l'INSP n'arrivent pas 
+                        directement de leurs études : ils ont déjà travaillé dans des ministères, des cabinets, des institutions 
+                        publiques. L'expérience préalable facilite l'intégration et renforce les réseaux internes à l'administration.
+                    </p>
+                    <p>
+                        Une présence notable du conseil et du secteur privé (24-36%) révèle également des trajectoires de mobilité 
+                        public-privé, caractéristiques des élites administratives contemporaines. Le passage par le conseil (cabinets 
+                        comme McKinsey, BCG, etc.) est devenu une étape valorisée dans les parcours d'accès à la haute fonction publique.
+                    </p>
+                </div>
+            </div>
+
+            <!-- TAB : AFFECTATIONS -->
+            <div id="socio-affectations" class="tab-content">
+                <h3>Domaines d'affectation post-INSP</h3>
+
+                <p>
+                    L'analyse des affectations post-INSP (disponible pour les promotions 2022-2023 et 2023-2024) révèle la distribution 
+                    des élèves dans huit grands domaines de l'action publique.
+                </p>
+
+                <div class="chart-container">
+                    <canvas id="chartAffectations"></canvas>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Domaine d'affectation</th>
+                            <th>Promo 2022-2023</th>
+                            <th>Promo 2023-2024</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Stratégies Économiques, Financières et Régulation des Marchés</td>
+                            <td>23</td>
+                            <td>20</td>
+                        </tr>
+                        <tr>
+                            <td>Politiques Sociales, Emploi, Santé et Cohésion</td>
+                            <td>15</td>
+                            <td>17</td>
+                        </tr>
+                        <tr>
+                            <td>Administration Territoriale et Gouvernance Locale</td>
+                            <td>12</td>
+                            <td>14</td>
+                        </tr>
+                        <tr>
+                            <td>Justice, Régulation Juridique et Contrôle Public</td>
+                            <td>10</td>
+                            <td>9</td>
+                        </tr>
+                        <tr>
+                            <td>Transition Écologique, Énergie, Agriculture et Climat</td>
+                            <td>10</td>
+                            <td>7</td>
+                        </tr>
+                        <tr>
+                            <td>Affaires Internationales, Diplomatie et Coopération Européenne</td>
+                            <td>7</td>
+                            <td>9</td>
+                        </tr>
+                        <tr>
+                            <td>Culture, Éducation, Transformation de la Fonction Publique</td>
+                            <td>5</td>
+                            <td>7</td>
+                        </tr>
+                        <tr>
+                            <td>Défense, Sécurité et Stratégies Militaires</td>
+                            <td>4</td>
+                            <td>5</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="highlight-box">
+                    <h4>Hiérarchie des domaines</h4>
+                    <p>
+                        Les domaines économiques et financiers demeurent les plus prisés (23 et 20 élèves), confirmant la centralité 
+                        de ces fonctions dans la haute administration. Les politiques sociales et l'administration territoriale constituent 
+                        également des débouchés importants. À l'inverse, les domaines de la défense et de la culture attirent moins d'élèves, 
+                        révélant une hiérarchie implicite des fonctions administratives.
+                    </p>
+                </div>
+
+                <div class="highlight-box warning">
+                    <h4>Exemples de fonctions</h4>
+                    <ul style="margin-top: 0.5rem;">
+                        <li><strong>Économie &amp; Finance :</strong> Directeur·trice de la stratégie économique, Chef·fe du pilotage budgétaire</li>
+                        <li><strong>Social &amp; Santé :</strong> Directeur·trice des politiques sociales, Chef·fe des relations du travail</li>
+                        <li><strong>Territorial :</strong> Directeur·trice de cabinet en préfecture, Chef·fe de la gouvernance locale</li>
+                        <li><strong>Justice :</strong> Magistrat·e administratif·ve, Responsable du contentieux</li>
+                        <li><strong>International :</strong> Conseiller·ère en politique internationale, Directeur·trice coopération européenne</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- TAB : SYNTHÈSE -->
+            <div id="socio-synthese" class="tab-content">
+                <h3>Points saillants de la sociographie INSP</h3>
+
+                <ul class="key-findings">
+                    <li>
+                        <strong>Reproduction sociale par le capital scolaire :</strong> La domination de Sciences Po (44 à 24 élèves selon 
+                        les promotions) et l'hyperaccumulation de formations prestigieuses (2,5 à 3,2 formations par élève) témoignent d'une 
+                        sélection par le capital culturel et symbolique. L'INSP recrute des profils ayant déjà prouvé leur excellence dans 
+                        les institutions les plus sélectives du système éducatif français.
+                    </li>
+                    <li>
+                        <strong>Féminisation incomplète :</strong> Avec 41,3% de femmes en moyenne, l'INSP reste en deçà de la parité. 
+                        Une sur-représentation masculine, bien que moins marquée que par le passé, signale la persistance de mécanismes 
+                        genrés dans l'accès aux positions de pouvoir administratif.
+                    </li>
+                    <li>
+                        <strong>Internationalisation des parcours :</strong> Entre 41 et 52% des élèves ont étudié dans une université internationale, 
+                        souvent prestigieuse (Oxford, Cambridge, LSE, Harvard, Sciences Po, Columbia, etc.). Une mobilité internationale 
+                        devenue ressource distinctive dans les parcours d'élite renforce les dispositions cosmopolites des futurs 
+                        hauts fonctionnaires.
+                    </li>
+                    <li>
+                        <strong>Pré-socialisation institutionnelle :</strong> Entre 60 et 74% des élèves ont une expérience dans l'administration 
+                        publique nationale avant leur entrée à l'INSP. Loin d'être de simples étudiants, les élèves sont déjà des professionnels 
+                        aguerris, familiers des codes et des réseaux administratifs. Une telle pré-socialisation facilite la reproduction des 
+                        élites en place.
+                    </li>
+                    <li>
+                        <strong>Socialisation diplomatique et territoriale :</strong> Les stages internationaux (78/89 élèves) et territoriaux 
+                        (80/89) constituent des rites de passage obligés, exposant les élèves aux réalités diplomatiques et préfectorales. 
+                        Les ambassades et préfectures demeurent les lieux privilégiés de cette socialisation professionnelle.
+                    </li>
+                    <li>
+                        <strong>Ouverture mesurée au secteur privé :</strong> Si 24 à 36% des élèves ont une expérience dans le conseil 
+                        ou le secteur privé, les missions d'ouverture en territoire (entreprises) restent partielles (57-64% de réalisation). 
+                        Une ouverture, souvent mise en avant dans la rhétorique de l'INSP, demeure secondaire par rapport aux socialisations 
+                        administratives traditionnelles.
+                    </li>
+                </ul>
+
+                <div class="highlight-box success">
+                    <h4>Synthèse : Continuité et ajustements</h4>
+                    <p>
+                        La sociographie de l'INSP révèle plus de continuités que de ruptures avec l'ENA. Les mécanismes de sélection 
+                        par le capital scolaire, la sur-représentation de Sciences Po, l'internationalisation des parcours et la 
+                        pré-socialisation institutionnelle demeurent les traits dominants. Les ajustements (missions en entreprise, 
+                        discours sur la diversité) restent marginaux face à la reproduction structurelle des élites administratives 
+                        françaises.
+                    </p>
+                    <p>
+                        Cette analyse sociographique corrobore les résultats de l'analyse lexicométrique : la transition ENA → INSP 
+                        s'apparente davantage à une modernisation symbolique qu'à une transformation profonde des modes de recrutement 
+                        et de formation des hauts fonctionnaires.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4 : COMPÉTENCES -->
+        <section id="competences">
+            <h2>4. Compétences d'ingénieur d'études mises en œuvre</h2>
+
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h4>Collecte et structuration de corpus</h4>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <p><strong>Compétences démontrées :</strong></p>
+                            <ul>
+                                <li>Web scraping et collecte automatisée de données (115 168 URL archivées)</li>
+                                <li>Constitution d'un corpus homogène et pertinent (31 465 documents)</li>
+                                <li>Traitement de données hétérogènes (archives web, profils LinkedIn, documents officiels)</li>
+                                <li>Structuration de bases de données sociographiques (327 élèves, multiples variables)</li>
+                            </ul>
+                            <p><strong>Transférabilité :</strong> La constitution de corpus d'enquête, à partir d'archives en ligne, 
+                            de bases de données institutionnelles ou de matériaux documentaires variés, mobilise directement les méthodes 
+                            développées ici.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h4>Analyses quantitatives et lexicométriques</h4>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <p><strong>Compétences démontrées :</strong></p>
+                            <ul>
+                                <li>Lemmatisation et normalisation de fréquences lexicales</li>
+                                <li>Analyse diachronique et construction de périodisations</li>
+                                <li>Identification de groupes conceptuels et calcul d'intensités</li>
+                                <li>Statistiques descriptives et tableaux croisés</li>
+                                <li>Analyses de trajectoires et de distributions</li>
+                            </ul>
+                            <p><strong>Transférabilité :</strong> L'analyse de tout corpus textuel (rapports, comptes rendus, transcriptions 
+                            d'entretiens) ou de données sociographiques devient possible grâce à ces méthodes, permettant d'objectiver 
+                            des tendances et de produire des indicateurs fiables.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h4>Visualisation de données et production de synthèses</h4>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <p><strong>Compétences démontrées :</strong></p>
+                            <ul>
+                                <li>Conception de visualisations interactives (graphiques d'évolution, heatmaps, diagrammes de Sankey)</li>
+                                <li>Hiérarchisation et présentation claire de résultats complexes</li>
+                                <li>Rédaction de synthèses structurées et accessibles</li>
+                                <li>Production d'un portfolio HTML autonome et ergonomique</li>
+                            </ul>
+                            <p><strong>Transférabilité :</strong> La restitution de résultats d'enquêtes à des publics variés (chercheurs, 
+                            décideurs, étudiants) s'appuie sur de telles compétences, sous forme de rapports, de présentations ou de supports 
+                            interactifs.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h4>Réalisation de monographies institutionnelles</h4>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <p><strong>Compétences démontrées :</strong></p>
+                            <ul>
+                                <li>Analyse approfondie d'une institution (ENA/INSP) sur une longue période (1998-2025)</li>
+                                <li>Articulation de sources multiples (discours, archives numériques, données sociographiques)</li>
+                                <li>Mise en évidence de ruptures et continuités institutionnelles</li>
+                                <li>Contextualisation sociologique et historique</li>
+                            </ul>
+                            <p><strong>Transférabilité :</strong> L'étude de toute organisation, institution ou dispositif public 
+                            devient transposable grâce à une telle approche monographique, permettant de documenter les transformations 
+                            organisationnelles et leurs effets.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h4>Analyse de webinaires et extraction d'enjeux</h4>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <p><strong>Compétences mobilisables :</strong></p>
+                            <ul>
+                                <li>Transcription et codage d'interventions orales</li>
+                                <li>Identification des thématiques et positions des intervenants</li>
+                                <li>Synthèse des débats et mise en évidence des consensus/désaccords</li>
+                                <li>Production de comptes rendus structurés et fidèles</li>
+                            </ul>
+                            <p><strong>Transférabilité :</strong> Les méthodes d'analyse lexicométrique et de synthèse développées dans 
+                            ce travail sont directement applicables à l'analyse de webinaires, permettant d'extraire les enjeux principaux 
+                            et de restituer les échanges de manière claire et synthétique.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h4>Coordination d'enquêtes et restitution des résultats</h4>
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <p><strong>Compétences démontrées et mobilisables :</strong></p>
+                            <ul>
+                                <li>Conception d'un dispositif d'enquête complet (lexico + sociographie)</li>
+                                <li>Gestion de données complexes et hétérogènes</li>
+                                <li>Coordination et supervision du traitement de données à grande échelle</li>
+                                <li>Pilotage de projets de recherche multi-méthodes</li>
+                            </ul>
+                            <p><strong>Transférabilité :</strong> La coordination d'enquêtes collectives, impliquant la supervision 
+                            du traitement de données et le pilotage de projets à plusieurs volets méthodologiques, mobilise l'ensemble 
+                            de ces capacités organisationnelles et techniques.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box success" style="margin-top: 2rem;">
+                <h4>Bilan des compétences</h4>
+                <p>
+                    Ce portfolio démontre ma capacité à <strong>concevoir, réaliser et restituer</strong> une enquête sociologique complète, 
+                    mobilisant des méthodes quantitatives et qualitatives, des outils informatiques (web scraping, analyse lexicométrique, 
+                    visualisation) et des compétences rédactionnelles (synthèses, rapports, monographies). Ces compétences sont transférables 
+                    à une grande variété de terrains et de dispositifs d'enquête dans le cadre de postes d'ingénieur·e d'études en sciences sociales.
+                </p>
+            </div>
+        </section>
+
+        <!-- SECTION 5 : CONCLUSION -->
+        <section id="conclusion">
+            <h2>5. Conclusion &amp; perspectives</h2>
+
+            <p>
+                L'articulation de l'analyse lexicométrique et de la sociographie révèle une <strong>modernisation principalement 
+                symbolique</strong> : le vocabulaire managérial s'impose (explosion de "compétences", effacement d'"élite"), 
+                l'architecture numérique se complexifie, mais les mécanismes de reproduction sociale demeurent largement inchangés. 
+                Domination de Sciences Po, hyperaccumulation de capital scolaire, pré-socialisation institutionnelle : autant d'indicateurs 
+                qui témoignent d'une continuité structurelle malgré les discours de transformation.
+            </p>
+
+            <p>
+                Sur le plan méthodologique, l'exploitation d'un corpus d'archives web d'une ampleur inédite (115 168 URL) ouvre 
+                des perspectives pour l'étude des institutions contemporaines. L'architecture numérique constitue un prisme d'analyse 
+                original, permettant d'objectiver les priorités communicationnelles et les stratégies de visibilité institutionnelle.
+            </p>
+
+            <h3>Perspectives de recherche</h3>
+            <div class="highlight-box" style="background: linear-gradient(135deg, #e8f4f8 0%, #d4edda 100%); border-left: 4px solid var(--success-color);">
+                <p>
+                    <strong>Plusieurs prolongements sont envisageables :</strong> analyse comparative avec d'autres écoles de service 
+                    public (INET, EHESP), étude longitudinale des carrières des élèves INSP, analyse de la réception médiatique de 
+                    la réforme, étude des discours des anciens élèves ENA sur la transformation.
+                </p>
+                <p style="margin-top: 1rem;">
+                    <strong>Un axe de recherche doctoral particulièrement prometteur</strong> concerne la place du numérique et des 
+                    algorithmes dans la haute fonction publique. Les entretiens menés avec les élèves et la direction de l'INSP révèlent 
+                    un paradoxe : alors que les algorithmes occupent une place croissante dans les sphères étatiques (gestion des données, 
+                    aide à la décision, automatisation de procédures), la formation des futurs hauts fonctionnaires reste lacunaire sur ces 
+                    enjeux. Un projet doctoral pourrait analyser comment s'opère la montée en puissance de l'algorithmisation de l'action 
+                    publique sans que les élites administratives traditionnelles ne maîtrisent véritablement ces outils. Quelles reconfigurations 
+                    de pouvoir, de légitimité et de hiérarchies cette asymétrie produit-elle ? Comment se construit un nouveau "capital 
+                    algorithmique" au sein de l'administration, quels profils y accèdent préférentiellement, et quelles tensions émergent 
+                    entre élites traditionnelles et nouveaux entrants dotés d'une expertise technique ? Un tel projet prolongerait l'analyse 
+                    de la transition ENA → INSP en l'inscrivant dans une réflexion plus large sur la transformation numérique de l'État et 
+                    l'émergence de nouvelles formes d'expertise bureaucratique.
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>Portfolio de recherche en sociologie des institutions et des élites administratives</p>
+        <p><strong>Thibault Lalut</strong> – Diplômé du master Sociologie à l'EHESS – Novembre 2025</p>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // ===== ACCORDIONS =====
+        function toggleAccordion(header) {
+            const item = header.parentElement;
+            const content = item.querySelector('.accordion-content');
+            const icon = item.querySelector('.accordion-icon');
+            
+            // Toggle active class
+            item.classList.toggle('active');
+            
+            // Adjust max-height for smooth animation
+            if (item.classList.contains('active')) {
+                content.style.maxHeight = content.scrollHeight + 'px';
+            } else {
+                content.style.maxHeight = '0';
+            }
+        }
+
+        // ===== TABS =====
+        function openTab(evt, tabName) {
+            // Get the section that contains this tab
+            const section = evt.currentTarget.closest('section');
+            
+            // Hide all tab contents in this section only
+            const tabContents = section.getElementsByClassName('tab-content');
+            for (let content of tabContents) {
+                content.classList.remove('active');
+            }
+            
+            // Remove active class from all buttons in this section only
+            const tabButtons = section.getElementsByClassName('tab-button');
+            for (let button of tabButtons) {
+                button.classList.remove('active');
+            }
+            
+            // Show selected tab and mark button as active
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+
+        // ===== CHARTS =====
+        // Common chart options
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 15,
+                        font: { size: 12 }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    padding: 12,
+                    titleFont: { size: 14 },
+                    bodyFont: { size: 13 }
+                }
+            }
+        };
+
+        // Colors
+        const colors = {
+            primary: '#2c3e50',
+            secondary: '#5D6D7E',
+            accent: '#B8860B',
+            success: '#52796F',
+            warning: '#8B7355',
+            purple: '#7D6E83',
+            orange: '#C9A690',
+            teal: '#6B8E94'
+        };
+
+        // ===== CHART: TERMES CLÉS =====
+        const ctxTermesCles = document.getElementById('chartTermesCles').getContext('2d');
+        new Chart(ctxTermesCles, {
+            type: 'line',
+            data: {
+                labels: ['1998-2005', '2005-2018', '2018-2019', '2019-2022', '2022-2025'],
+                datasets: [
+                    {
+                        label: 'compétences',
+                        data: [0.8, 1.2, 0.5, 1.8, 6.8],
+                        borderColor: colors.success,
+                        backgroundColor: colors.success + '20',
+                        borderWidth: 3,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'concours',
+                        data: [22, 45, 120, 95, 105],
+                        borderColor: colors.secondary,
+                        backgroundColor: colors.secondary + '20',
+                        borderWidth: 3,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'élite',
+                        data: [2.3, 3.8, 2.4, 1.2, 0.2],
+                        borderColor: colors.accent,
+                        backgroundColor: colors.accent + '20',
+                        borderWidth: 3,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'innovation',
+                        data: [4, 3.5, 2, 9, 11],
+                        borderColor: colors.purple,
+                        backgroundColor: colors.purple + '20',
+                        borderWidth: 3,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Fréquence pour 10 000 mots'
+                        }
+                    }
+                }
+            }
+        });
+
+        // ===== CHART: GROUPES CONCEPTUELS =====
+        const ctxGroupes = document.getElementById('chartGroupesConceptuels').getContext('2d');
+        new Chart(ctxGroupes, {
+            type: 'line',
+            data: {
+                labels: ['1998-2005', '2005-2018', '2018-2019', '2019-2022', '2022-2025'],
+                datasets: [
+                    {
+                        label: 'Élitaire & Sélection',
+                        data: [120, 150, 180, 95, 35],
+                        borderColor: colors.accent,
+                        backgroundColor: colors.accent + '20',
+                        borderWidth: 2,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'Managérial & Moderne',
+                        data: [35, 40, 45, 68, 115],
+                        borderColor: colors.secondary,
+                        backgroundColor: colors.secondary + '20',
+                        borderWidth: 2,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'Ouverture & Diversité',
+                        data: [40, 95, 120, 85, 265],
+                        borderColor: colors.success,
+                        backgroundColor: colors.success + '20',
+                        borderWidth: 2,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'Continuité Institutionnelle',
+                        data: [70, 85, 160, 75, 195],
+                        borderColor: colors.warning,
+                        backgroundColor: colors.warning + '20',
+                        borderWidth: 2,
+                        tension: 0.3
+                    }
+                ]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Fréquence cumulée (10k mots)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // ===== CHART: PERSISTANCE =====
+        const ctxPersistance = document.getElementById('chartPersistance').getContext('2d');
+        new Chart(ctxPersistance, {
+            type: 'bar',
+            data: {
+                labels: ['service public', 'numérique', 'compétences', 'innovation', 'concours', 
+                         'diversité', 'formation', 'carrière', 'réforme', 'management'],
+                datasets: [
+                    {
+                        label: 'Période ENA (1998-2021)',
+                        data: [62, 58, 40, 55, 85, 78, 82, 88, 75, 92],
+                        backgroundColor: colors.secondary
+                    },
+                    {
+                        label: 'Période INSP (2022-2024)',
+                        data: [38, 42, 60, 45, 15, 22, 18, 12, 25, 8],
+                        backgroundColor: '#4CAF50'  // Couleur verte plus vive et distinguable
+                    }
+                ]
+            },
+            options: {
+                ...commonOptions,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        stacked: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Proportion de la fréquence (%)'
+                        }
+                    },
+                    y: {
+                        stacked: true
+                    }
+                }
+            }
+        });
+
+        // ===== CHART: PROFONDEUR URL =====
+        const ctxProfondeur = document.getElementById('chartProfondeurURL').getContext('2d');
+        new Chart(ctxProfondeur, {
+            type: 'line',
+            data: {
+                labels: ['1998', '2000', '2002', '2004', '2006', '2008', '2010', '2012', '2014', 
+                         '2016', '2018', '2020', '2022', '2024'],
+                datasets: [{
+                    label: 'Profondeur moyenne des URLs',
+                    data: [3.5, 4.2, 4.5, 4.8, 8.9, 3.8, 5.2, 4.8, 5.8, 
+                           6.2, 6.8, 7.5, 6.5, 7.2],
+                    borderColor: colors.secondary,
+                    backgroundColor: colors.secondary + '20',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Nombre de niveaux hiérarchiques'
+                        }
+                    }
+                }
+            }
+        });
+
+        // ===== CHART: NOMBRE SECTIONS =====
+        const ctxSections = document.getElementById('chartNombreSections').getContext('2d');
+        new Chart(ctxSections, {
+            type: 'line',
+            data: {
+                labels: ['1998', '2000', '2005', '2010', '2015', '2018', '2020', '2021', '2022', '2023', '2024'],
+                datasets: [{
+                    label: 'Nombre de sections distinctes',
+                    data: [25, 35, 45, 65, 42, 58, 95, 78, 125, 148, 162],
+                    borderColor: colors.success,
+                    backgroundColor: colors.success + '20',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Nombre de sections'
+                        }
+                    }
+                }
+            }
+        });
+
+        // ===== CHART: TECHNIQUE/THÉMATIQUE =====
+        const ctxTech = document.getElementById('chartTechniqueThematique').getContext('2d');
+        new Chart(ctxTech, {
+            type: 'bar',
+            data: {
+                labels: ['1998-2005', '2005-2010', '2010-2015', '2015-2020', '2020-2022', '2022-2025'],
+                datasets: [
+                    {
+                        label: 'Sections techniques',
+                        data: [15, 75, 85, 70, 55, 25],
+                        backgroundColor: colors.secondary
+                    },
+                    {
+                        label: 'Sections thématiques',
+                        data: [85, 25, 15, 30, 45, 75],
+                        backgroundColor: colors.accent
+                    }
+                ]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    x: {
+                        stacked: true
+                    },
+                    y: {
+                        stacked: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Pourcentage (%)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // ===== CHART: GENRE =====
+        const ctxGenre = document.getElementById('chartGenre').getContext('2d');
+        new Chart(ctxGenre, {
+            type: 'bar',
+            data: {
+                labels: ['Promo 2022-2023', 'Promo 2023-2024', 'Promo 2024-2026', 'Promo 2025-2027A'],
+                datasets: [
+                    {
+                        label: 'Femmes',
+                        data: [42.7, 41.6, 39.8, 41.0],
+                        backgroundColor: colors.purple
+                    },
+                    {
+                        label: 'Hommes',
+                        data: [57.3, 58.4, 60.2, 59.0],
+                        backgroundColor: colors.secondary
+                    }
+                ]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    x: {
+                        stacked: true
+                    },
+                    y: {
+                        stacked: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Pourcentage (%)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // ===== CHART: DERNIER ÉTABLISSEMENT =====
+        const ctxEtab = document.getElementById('chartDernierEtablissement').getContext('2d');
+        new Chart(ctxEtab, {
+            type: 'bar',
+            data: {
+                labels: ['Sciences Po', 'Universités', 'ENS', 'IGPDE', 'Commerce', 'Internat.'],
+                datasets: [
+                    {
+                        label: '2022-2023',
+                        data: [44, 13, 6, 9, 4, 3],
+                        backgroundColor: colors.secondary
+                    },
+                    {
+                        label: '2023-2024',
+                        data: [29, 25, 9, 4, 5, 3],
+                        backgroundColor: colors.success
+                    },
+                    {
+                        label: '2024-2026',
+                        data: [35, 12, 10, 7, 7, 3],
+                        backgroundColor: colors.warning
+                    },
+                    {
+                        label: '2025-2027A',
+                        data: [24, 16, 4, 3, 5, 1],
+                        backgroundColor: colors.purple
+                    }
+                ]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Nombre d\'élèves'
+                        }
+                    }
+                }
+            }
+        });
+
+        // ===== CHART: PARCOURS ACADÉMIQUE =====
+        const ctxParcours = document.getElementById('chartParcoursAcademique').getContext('2d');
+        new Chart(ctxParcours, {
+            type: 'bar',
+            data: {
+                labels: ['IEP', 'Univ. intern.', 'Univ. IDF', 'ENS', 'Commerce', 'CPGE'],
+                datasets: [
+                    {
+                        label: '2022-2023',
+                        data: [72, 52, 39, 11, 12, 15],
+                        backgroundColor: colors.secondary
+                    },
+                    {
+                        label: '2023-2024',
+                        data: [60, 49, 52, 22, 18, 17],
+                        backgroundColor: colors.success
+                    },
+                    {
+                        label: '2024-2026',
+                        data: [70, 48, 33, 15, 22, 20],
+                        backgroundColor: colors.warning
+                    },
+                    {
+                        label: '2025-2027A',
+                        data: [61, 41, 48, 13, 20, 21],
+                        backgroundColor: colors.purple
+                    }
+                ]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Pourcentage d\'élèves (%)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // ===== CHART: STAGES INTERNATIONAUX =====
+        const ctxStagesInt = document.getElementById('chartStagesInternationaux').getContext('2d');
+        new Chart(ctxStagesInt, {
+            type: 'pie',
+            data: {
+                labels: ['Ambassades', 'Repr. UE', 'MAE', 'OI', 'Commission EU', 'Autres'],
+                datasets: [{
+                    data: [51, 7, 7, 5, 5, 3],
+                    backgroundColor: [
+                        colors.secondary,
+                        colors.success,
+                        colors.warning,
+                        colors.purple,
+                        colors.accent,
+                        colors.teal
+                    ]
+                }]
+            },
+            options: {
+                ...commonOptions,
+                plugins: {
+                    ...commonOptions.plugins,
+                    legend: {
+                        position: 'right'
+                    }
+                }
+            }
+        });
+
+        // ===== CHART: MISSIONS ENTREPRISE =====
+        const ctxMissions = document.getElementById('chartMissionsEntreprise').getContext('2d');
+        new Chart(ctxMissions, {
+            type: 'doughnut',
+            data: {
+                labels: ['Industrielles', 'Agricoles', 'Technologiques', 'Services', 'Coopératives', 'Autres', 'Non mentionné'],
+                datasets: [{
+                    data: [22, 12, 8, 6, 5, 4, 32],
+                    backgroundColor: [
+                        colors.secondary,
+                        colors.success,
+                        colors.purple,
+                        colors.warning,
+                        colors.teal,
+                        colors.accent,
+                        '#95a5a6'
+                    ]
+                }]
+            },
+            options: {
+                ...commonOptions,
+                plugins: {
+                    ...commonOptions.plugins,
+                    legend: {
+                        position: 'right'
+                    }
+                }
+            }
+        });
+
+        // ===== CHART: EXPÉRIENCE PRO =====
+        const ctxExp = document.getElementById('chartExperiencePro').getContext('2d');
+        new Chart(ctxExp, {
+            type: 'bar',
+            data: {
+                labels: ['Admin. publique', 'Conseil & privé', 'International', 'Enseignement', 'Parlementaire'],
+                datasets: [
+                    {
+                        label: '2022-2023',
+                        data: [65, 24, 21, 16, 22],
+                        backgroundColor: colors.secondary
+                    },
+                    {
+                        label: '2023-2024',
+                        data: [60, 31, 31, 27, 21],
+                        backgroundColor: colors.success
+                    },
+                    {
+                        label: '2024-2026',
+                        data: [62, 36, 34, 34, 31],
+                        backgroundColor: colors.warning
+                    },
+                    {
+                        label: '2025-2027',
+                        data: [74, 31, 36, 20, 30],
+                        backgroundColor: colors.purple
+                    }
+                ]
+            },
+            options: {
+                ...commonOptions,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Pourcentage d\'élèves (%)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // ===== CHART: AFFECTATIONS =====
+        const ctxAffect = document.getElementById('chartAffectations').getContext('2d');
+        new Chart(ctxAffect, {
+            type: 'bar',
+            data: {
+                labels: ['Éco & Finance', 'Social & Santé', 'Territorial', 'Justice', 
+                         'Écologie', 'International', 'Culture & Éduc', 'Défense'],
+                datasets: [
+                    {
+                        label: 'Promo 2022-2023',
+                        data: [23, 15, 12, 10, 10, 7, 5, 4],
+                        backgroundColor: colors.secondary
+                    },
+                    {
+                        label: 'Promo 2023-2024',
+                        data: [20, 17, 14, 9, 7, 9, 7, 5],
+                        backgroundColor: colors.success
+                    }
+                ]
+            },
+            options: {
+                ...commonOptions,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Nombre d\'élèves'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+
+</body></html>
